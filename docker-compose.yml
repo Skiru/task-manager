@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  purple-clouds-task-manager-php:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile-dev
+    volumes:
+      - .:/var/www/html
+    networks: ["default", "purple_clouds_network"]
+
+  purple-clouds-task-manager-nginx:
+    image: nginx:latest
+    ports:
+      - "8002:8002"
+    depends_on:
+      - purple-clouds-task-manager-php
+    volumes:
+      - .:/var/www/html
+      - ./docker/nginx/nginx.conf:/opt/bitnami/nginx/conf/nginx.conf
+    networks: ["default", "purple_clouds_network"]
+
+networks:
+  purple_clouds_network: {"external": {"name": "purple_clouds_network"}}
