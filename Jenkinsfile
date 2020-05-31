@@ -51,7 +51,7 @@ pipeline {
         stage('Build task-manager application') {
             steps{
                 sshagent (credentials: ['purple-clouds-server']) {
-                    sh 'echo "docker login --username mkoziol --password pamietamhaslo;IMAGE_BUILD_TAG=$containerName-$BUILD_NUMBER; export IMAGE_BUILD_TAG; docker-compose -f /var/www/PurpleClouds/blog/docker-compose.yml up -d;" | ssh -o StrictHostKeyChecking=no -l root 77.55.222.35'
+                    sh 'echo "docker login --username mkoziol --password pamietamhaslo;IMAGE_BUILD_TAG=$containerName-$BUILD_NUMBER; export IMAGE_BUILD_TAG; docker-compose -f /var/www/PurpleClouds/task-manager/docker-compose.yml up -d;" | ssh -o StrictHostKeyChecking=no -l root 77.55.222.35'
                 }
             }
         }
