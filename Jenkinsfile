@@ -44,7 +44,6 @@ pipeline {
         stage('Remove Unused docker image') {
           steps{
             sh "docker rmi $registry:$containerName-$BUILD_NUMBER"
-            sh "docker rmi $registry:$assetsContainerName-$BUILD_NUMBER"
             sh "docker image prune -f"
           }
         }
