@@ -8,7 +8,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 COPY .env.dist .env
 
 ENV APP_ENV=prod \
-    APP_SECRET=ca6777ca3b9d07d5a38d4f68036f232d 
+    APP_SECRET=ca6777ca3b9d07d5a38d4f68036f232d
 
 COPY ./composer.json ./
 COPY ./composer.lock ./

@@ -5,7 +5,6 @@ pipeline {
         registry = "mkoziol/purpleclouds"
         registryCredential = 'dockerhub'
         dockerPhpImage = ''
-        dockerAssetsImage = ''
         containerName = 'task-manager-php'
     }
 
@@ -27,7 +26,7 @@ pipeline {
         stage('Building php image') {
           steps{
             script {
-              dockerPhpImage = docker.build(registry + ":" + containerName + "-$BUILD_NUMBER", "-f ./docker/php/Dockerfile .")
+              dockerPhpImage = docker.build(registry + ":" + containerName + "-$BUILD_NUMBER", "-f ./docker/php/Dockerfile . --no-cache=true")
             }
           }
         }
