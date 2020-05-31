@@ -35,7 +35,7 @@ pipeline {
             steps{
                 script {
                   docker.withRegistry( '', registryCredential ) {
-                    dockerPhpImage.push()
+                    dockerPhpImacyjnejge.push()
                   }
                 }
            }
