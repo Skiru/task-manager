@@ -5,10 +5,10 @@ RUN docker-php-ext-install pdo pdo_pgsql zip bcmath opcache
 RUN docker-php-ext-enable pdo pdo_pgsql zip bcmath opcache
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-COPY ./.env.dist ./.env
+COPY .env.dist .env
 
 ENV APP_ENV=prod \
-    APP_SECRET=ca6777ca3b9d07d5a38d4f68036f232d \
+    APP_SECRET=ca6777ca3b9d07d5a38d4f68036f232d 
 
 COPY ./composer.json ./
 COPY ./composer.lock ./
