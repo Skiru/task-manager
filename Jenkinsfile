@@ -19,7 +19,7 @@ pipeline {
                      doGenerateSubmoduleConfigurations: false,
                      extensions: [],
                      submoduleCfg: [],
-                     userRemoteConfigs: [[credentialsId: 'task-manager-repository', url: "git@github.com:Skiru/task-manager.git"]]]
+                     userRemoteConfigs: [[credentialsId: 'task_manager_repository', url: "git@github.com:Skiru/task-manager.git"]]]
                 )
             }
         }
