@@ -20,7 +20,5 @@ services:
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     networks: ["default", "purple_clouds_network"]
 
-
-
 networks:
   purple_clouds_network: {"external": {"name": "purple_clouds_network"}}

@@ -11,6 +11,6 @@ class HomepageController extends AbstractController
 {
     public function homepage(): Response
     {
-        return new Response('<h1> Task manager application UKOŃCZONY!</h1>');
+        return $this->render('frontend/homepage.html.twig', []);
     }
 }
