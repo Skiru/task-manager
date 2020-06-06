@@ -3,6 +3,7 @@
     "license": "proprietary",
     "require": {
         "php": "^7.2.5",
+        "ext-pdo_sqlite": "*",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "symfony/console": "5.0.*",
