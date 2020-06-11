@@ -43,4 +43,39 @@ final class Goal
      * @ORM\JoinColumn(name="task_id", referencedColumnName="id")
      */
     private $task;
+
+    public function setGoalIdentifier(string $goalIdentifier): Goal
+    {
+        $this->goalIdentifier = $goalIdentifier;
+
+        return $this;
+    }
+
+    public function setName(string $name): Goal
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function setIsFinished(bool $isFinished): Goal
+    {
+        $this->isFinished = $isFinished;
+
+        return $this;
+    }
+
+    public function setRealizationDescription(string $realizationDescription): Goal
+    {
+        $this->realizationDescription = $realizationDescription;
+
+        return $this;
+    }
+
+    public function setTask($task)
+    {
+        $this->task = $task;
+
+        return $this;
+    }
 }

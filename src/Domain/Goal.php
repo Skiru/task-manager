@@ -43,4 +43,14 @@ final class Goal
 
         $this->isFinished = true;
     }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getRealizationDescription(): string
+    {
+        return $this->realizationDescription;
+    }
 }

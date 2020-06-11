@@ -24,6 +24,16 @@ connect_google_check:
 # Tasks endpoints
 task_create:
     path: /api/tasks
-    methods: ["POST"]
+    methods: ['POST']
     controller: App\Controller\ApiController\TaskController::create
 
+# Goal endpoints
+goal_create:
+    path: /api/goals
+    methods: ['POST']
+    controller: App\Controller\ApiController\GoalController::create
+
+goal_find_by_id:
+    path: /api/goals/{goalIdentifier}
+    methods: ['GET']
+    controller: App\Controller\ApiController\GoalController::find

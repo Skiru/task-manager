@@ -1,4 +1,7 @@
 {
+    "brick/math": {
+        "version": "0.8.15"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -140,6 +143,12 @@
     },
     "ralouphie/getallheaders": {
         "version": "3.0.3"
+    },
+    "ramsey/collection": {
+        "version": "1.0.1"
+    },
+    "ramsey/uuid": {
+        "version": "4.0.1"
     },
     "symfony/cache": {
         "version": "v5.0.8"

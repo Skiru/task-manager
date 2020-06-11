@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Infrastructure\Repository\TaskRepository")
  */
-class Task
+final class Task
 {
     /**
      * @ORM\Column(type="integer")
