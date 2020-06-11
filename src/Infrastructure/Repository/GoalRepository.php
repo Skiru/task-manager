@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Repository;
 
-use App\Infrastructure\Entity\User;
+use App\Infrastructure\Entity\Goal;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
-final class UserRepository extends ServiceEntityRepository
+final class GoalRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, User::class);
+        parent::__construct($registry, Goal::class);
     }
 }

@@ -55,6 +55,12 @@ class User implements UserInterface
      */
     private string $picture;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Task", inversedBy="workers")
+     * @ORM\JoinColumn(name="worker_id", referencedColumnName="id")
+     */
+    private $task;
+
     public function __construct()
     {
         $this->roles = ['ROLE_USER'];

@@ -1,9 +1,15 @@
+# Application frontend
 homepage:
     path: /
     controller: App\Controller\FrontendController\HomepageController::homepage
 
 app_logout:
     path: /logout
+    methods: ['GET']
+
+app_tasks:
+    path: /tasks
+    controller: App\Controller\FrontendController\TaskController::show
     methods: ['GET']
 
 #Google OAuth2 routes
@@ -20,3 +26,4 @@ task_create:
     path: /api/tasks
     methods: ["POST"]
     controller: App\Controller\ApiController\TaskController::create
+

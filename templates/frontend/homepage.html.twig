@@ -110,7 +110,7 @@
             <p class="lead">Create task, manage the deadlines add new workers - easily with a joy!</p>
             <p class="lead">
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    <a href="#" class="btn btn-lg btn-secondary">Jump to your tasks</a>
+                    <a href="{{ path('app_tasks') }}" class="btn btn-lg btn-secondary">Jump to your tasks</a>
                 {% else %}
                     <a class="btn btn-lg btn-primary" href="{{ path('connect_google_start') }}">
                         Log in with google
