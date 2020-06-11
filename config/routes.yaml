@@ -2,6 +2,10 @@ homepage:
     path: /
     controller: App\Controller\FrontendController\HomepageController::homepage
 
+app_logout:
+    path: /logout
+    methods: ['GET']
+
 #Google OAuth2 routes
 connect_google_start:
     path: /connect/google

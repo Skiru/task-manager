@@ -11,7 +11,8 @@ security:
         main:
             pattern: /
             anonymous: lazy
-            logout: ~
+            logout:
+                path: app_logout
             guard:
                 authenticators:
                    - App\Infrastructure\Security\GoogleAuthenticator
