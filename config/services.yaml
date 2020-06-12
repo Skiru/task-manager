@@ -31,4 +31,5 @@ services:
     App\Infrastructure\CommandBus\CommandBus:
         calls:
             - [registerHandler, ['App\Application\Goal\Command\CreateGoalCommand', '@App\Application\Goal\Command\CreateGoalCommandHandler']]
-
+            - [registerHandler, ['App\Application\User\Command\PromoteUserCommand', '@App\Application\User\Command\PromoteUserCommandHandler']]
+            - [registerHandler, ['App\Application\Task\Command\CreateTaskCommand', '@App\Application\Task\Command\CreateTaskCommandHandler']]

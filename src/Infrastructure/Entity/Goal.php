@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Infrastructure\Repository\UserRepository")
  */
-final class Goal
+final class Goal implements \JsonSerializable
 {
     /**
      * @ORM\Column(type="integer")
@@ -77,5 +77,45 @@ final class Goal
         $this->task = $task;
 
         return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'goal_identifier' => $this->goalIdentifier,
+            'name' => $this->name,
+            'is_finished' => $this->isFinished,
+            'description' => $this->realizationDescription
+        ];
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getGoalIdentifier(): string
+    {
+        return $this->goalIdentifier;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function isFinished(): bool
+    {
+        return $this->isFinished;
+    }
+
+    public function getRealizationDescription(): string
+    {
+        return $this->realizationDescription;
+    }
+
+    public function getTask()
+    {
+        return $this->task;
     }
 }

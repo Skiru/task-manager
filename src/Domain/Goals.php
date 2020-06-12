@@ -56,4 +56,12 @@ final class Goals
 
         $this->goals[$goal->getGoalIdentifier()->toString()]->markAsFinished();
     }
+
+    /**
+     * @return Goal[]
+     */
+    public function getGoals(): array
+    {
+        return $this->goals;
+    }
 }

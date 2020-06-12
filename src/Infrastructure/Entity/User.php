@@ -96,80 +96,58 @@ final class User implements UserInterface
         return null;
     }
 
-    /**
-     * @param int $id
-     * @return User
-     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getPicture(): string
+    {
+        return $this->picture;
+    }
+
     public function setId(int $id): User
     {
         $this->id = $id;
         return $this;
     }
 
-    /**
-     * @param string $name
-     * @return User
-     */
     public function setName(string $name): User
     {
         $this->name = $name;
         return $this;
     }
 
-    /**
-     * @param string $givenName
-     * @return User
-     */
     public function setGivenName(string $givenName): User
     {
         $this->givenName = $givenName;
         return $this;
     }
 
-    /**
-     * @param string $familyName
-     * @return User
-     */
     public function setFamilyName(string $familyName): User
     {
         $this->familyName = $familyName;
         return $this;
     }
 
-    /**
-     * @param string $email
-     * @return User
-     */
     public function setEmail(string $email): User
     {
         $this->email = $email;
         return $this;
     }
 
-    /**
-     * @param string $googleId
-     * @return User
-     */
     public function setGoogleId(string $googleId): User
     {
         $this->googleId = $googleId;
         return $this;
     }
 
-    /**
-     * @param array $roles
-     * @return User
-     */
     public function setRoles(array $roles): User
     {
         $this->roles = $roles;
         return $this;
     }
 
-    /**
-     * @param string $picture
-     * @return User
-     */
     public function setPicture(string $picture): User
     {
         $this->picture = $picture;

@@ -36,7 +36,7 @@ class GoogleAuthenticator extends SocialAuthenticator
     public function start(Request $request, AuthenticationException $authException = null)
     {
         return new RedirectResponse(
-            'homepage',
+            '/',
             Response::HTTP_TEMPORARY_REDIRECT
         );
     }
@@ -85,7 +85,10 @@ class GoogleAuthenticator extends SocialAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        return null;
+        return new RedirectResponse(
+        '/tasks',
+        Response::HTTP_TEMPORARY_REDIRECT
+    );
     }
 
     private function getGoogleClient(): GoogleClient

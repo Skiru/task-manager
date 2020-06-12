@@ -19,6 +19,22 @@ final class Task
     private Goals $goals;
     private Workers $workers;
 
+    public function __construct(
+        User $creator,
+        int $requiredWorkers,
+        DateTimeImmutable $startDate,
+        DateTimeImmutable $endDate,
+        Goals $goals,
+        Workers $workers
+    ) {
+        $this->creator = $creator;
+        $this->requiredWorkers = $requiredWorkers;
+        $this->startDate = $startDate;
+        $this->endDate = $endDate;
+        $this->goals = $goals;
+        $this->workers = $workers;
+    }
+
     public function isStarted(): bool
     {
         return $this->startDate > new DateTimeImmutable();
@@ -126,5 +142,35 @@ final class Task
         if ($this->goals->areAllGoalsFinished()) {
             $this->endDate = new DateTimeImmutable();
         }
+    }
+
+    public function getCreator(): User
+    {
+        return $this->creator;
+    }
+
+    public function getRequiredWorkers(): int
+    {
+        return $this->requiredWorkers;
+    }
+
+    public function getStartDate(): DateTimeImmutable
+    {
+        return $this->startDate;
+    }
+
+    public function getEndDate(): DateTimeImmutable
+    {
+        return $this->endDate;
+    }
+
+    public function getGoals(): Goals
+    {
+        return $this->goals;
+    }
+
+    public function getWorkers(): Workers
+    {
+        return $this->workers;
     }
 }

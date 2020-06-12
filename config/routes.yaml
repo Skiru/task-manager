@@ -21,6 +21,12 @@ connect_google_check:
     path: /connect/google/check
     controller: App\Controller\GoogleController::connectCheck
 
+# Users endpoints
+user_promote:
+    path: /api/users/{userId}/promote
+    methods: ['GET']
+    controller: App\Controller\ApiController\UserController::promote
+
 # Tasks endpoints
 task_create:
     path: /api/tasks
@@ -37,3 +43,8 @@ goal_find_by_id:
     path: /api/goals/{goalIdentifier}
     methods: ['GET']
     controller: App\Controller\ApiController\GoalController::find
+
+goal_find_all:
+    path: /api/goals
+    methods: ['GET']
+    controller: App\Controller\ApiController\GoalController::findAll

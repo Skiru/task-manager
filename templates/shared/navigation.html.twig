@@ -1,0 +1,137 @@
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="{{ path('homepage') }}">Task manager</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('app_tasks') }}">Tasks list</a>
+            </li>
+            {% if is_granted('ROLE_SUPERUSER') %}
+            <li class="nav-item">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-target="#taskCreate">
+                    Create task
+                </button>
+            </li>
+            {% endif %}
+            {% if not is_granted('ROLE_SUPERUSER') %}
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ path('user_promote', {'userId': app.user.id}) }}">Become a creator</a>
+                </li>
+            {% endif %}
+
+        </ul>
+            <span class="navbar-text">
+              <lead>{{ app.user.username }}</lead>
+                <img class="img img-fluid rounded-circle" width="40px" alt="User picture" src="{{ app.user.picture }}"/>
+            </span>
+            <span class="nav-item">
+                <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
+            </span>
+    </div>
+</nav>
+
+{% for label, messages in app.flashes(['success', 'danger']) %}
+    {% for message in messages %}
+        <div class="alert alert-{{ label }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+<div class="modal fade" id="taskCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Task creation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{{ path('task_create') }}">
+                    <input type="hidden" name="creator_id" value="{{ app.user.id }}">
+
+                    <div class="form-group">
+                        <label for="required_number_of_workers">Required number of workers</label>
+                        <input type="number" name="required_workers" class="form-control" id="required_number_of_workers">
+                    </div>
+                    <div class="form-group">
+                        <label for="start_date">Start date</label>
+                        <input type="date" name="start_date" class="form-control" id="start_date">
+                    </div>
+                    <div class="form-group">
+                        <label for="end_date">End date</label>
+                        <input type="date" name="end_date" class="form-control" id="end_date">
+                    </div>
+                    <div class="form-group">
+                        <label for="js-goals">Goals</label>
+                        <ul class="list-group list-group-flush" id="js-goals">
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Create task</button>
+                    </div>
+                </form>
+
+                <form id="js-goal-create-form" data-create-url="{{ absolute_url(path('goal_create')) }}">
+                    <fieldset>
+                        <legend>New goal creation</legend>
+                        <div class="form-group mb-2">
+                            <label for="goal_name" class="sr-only">Goal name</label>
+                            <input type="text" name="name" id="goal_name" placeholder="Goal name" class="form-control"/>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="goal_description" class="sr-only">Goal description</label>
+                            <textarea name="realizationDescription" id="goal_description" placeholder="Goal description" class="form-control"></textarea>
+                        </div>
+
+                        <button id="js-create-goal-btn" class="btn btn-sm btn-primary">Create new goal</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            const createGoalBtn = $('#js-create-goal-btn');
+            const goalCreateForm = $('#js-goal-create-form');
+            const createUrl = goalCreateForm.data('create-url');
+            const goalsContainer = $('#js-goals');
+
+            createGoalBtn.on('click', function (e) {
+
+                const name = goalCreateForm.find("[name=name]").val();
+                const realizationDescription = goalCreateForm.find("[name=realizationDescription]").val();
+
+                if (name === "" || realizationDescription === "") {
+                    alert('Fill the name and realization description for goal creation!');
+                    return false;
+                }
+
+                const request = $.ajax({
+                    method: "POST",
+                    url: createUrl,
+                    data: JSON.stringify({ name: name, realizationDescription: realizationDescription }),
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                });
+
+                request.done(function (response) {
+                    goalsContainer.append('<li class="list-group-item">' + response.name + '<input type="hidden" name="goal[]" value="' + response.goal + '"/> </li>')
+                });
+
+                request.fail(function (response) {
+                    alert('Something went wrong:' + response.responseText);
+                });
+
+                return false;
+            });
+        });
+    </script>
+{% endblock %}

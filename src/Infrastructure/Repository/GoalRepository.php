@@ -6,6 +6,7 @@ namespace App\Infrastructure\Repository;
 
 use App\Application\Goal\Query\GoalQueryInterface;
 use App\Domain\Goal as DomainGoal;
+use App\Domain\Goals;
 use App\Domain\Repository\GoalRepositoryInterface;
 use App\Infrastructure\Entity\Goal;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;

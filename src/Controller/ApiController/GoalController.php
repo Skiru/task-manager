@@ -7,6 +7,7 @@ namespace App\Controller\ApiController;
 use App\Application\Goal\Command\CreateGoalCommand;
 use App\Application\Goal\Query\GoalQueryInterface;
 use App\Infrastructure\CommandBus\CommandBusInterface;
+use App\Infrastructure\Entity\Goal;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,6 +24,15 @@ final class GoalController extends AbstractController
     {
         $this->bus = $bus;
         $this->goalQuery = $goalQuery;
+    }
+
+    public function findAll(): JsonResponse
+    {
+        $goals = $this->goalQuery->findAll();
+
+        return new JsonResponse([
+            'goals' => $goals
+        ]);
     }
 
     public function create(Request $request): JsonResponse
@@ -45,7 +55,8 @@ final class GoalController extends AbstractController
 
 
         return new JsonResponse([
-            'goal' => $uuid->toString()
+            'goal' => $uuid->toString(),
+            'name' => $command->getName()
         ], Response::HTTP_CREATED);
     }
 

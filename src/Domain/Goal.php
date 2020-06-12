@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Domain;
 
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 final class Goal
 {
-    private Uuid $goalIdentifier;
+    private UuidInterface $goalIdentifier;
     private string $name;
     private bool $isFinished;
     private string $realizationDescription;
 
     public function __construct(
-        Uuid $goalIdentifier,
+        UuidInterface $goalIdentifier,
         string $name,
         bool $isFinished,
         string $realizationDescription
@@ -25,7 +25,7 @@ final class Goal
         $this->realizationDescription = $realizationDescription;
     }
 
-    public function getGoalIdentifier(): Uuid
+    public function getGoalIdentifier(): UuidInterface
     {
         return $this->goalIdentifier;
     }
