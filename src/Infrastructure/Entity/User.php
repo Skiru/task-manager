@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Infrastructure\Repository\UserRepository")
  */
-final class User implements UserInterface
+class User implements UserInterface
 {
     /**
      * @ORM\Column(type="integer")
@@ -56,14 +57,19 @@ final class User implements UserInterface
     private string $picture;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Task", inversedBy="workers")
-     * @ORM\JoinColumn(name="worker_id", referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="Task", mappedBy="workers")
      */
-    private $task;
+    private $tasks;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Task", mappedBy="creator")
+     */
+    private $createdTasks;
 
     public function __construct()
     {
         $this->roles = ['ROLE_USER'];
+        $this->tasks = new ArrayCollection();
     }
 
     public function getRoles(): array
@@ -171,5 +177,54 @@ final class User implements UserInterface
             ->setEmail($email)
             ->setGoogleId($googleId)
             ->setPicture($picture);
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getGivenName(): string
+    {
+        return $this->givenName;
+    }
+
+    public function getFamilyName(): string
+    {
+        return $this->familyName;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function getGoogleId(): string
+    {
+        return $this->googleId;
+    }
+
+    public function addCreatedTask(Task $task): User
+    {
+        $this->createdTasks[] = $task;
+        $task->setCreator($this);
+
+        return $this;
+    }
+
+    public function addTask(Task $task): User
+    {
+        $this->tasks[] = $task;
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): User
+    {
+        if ($this->tasks->contains($task)) {
+            $this->tasks->removeElement($task);
+        }
+
+        return $this;
     }
 }

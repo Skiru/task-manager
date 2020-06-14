@@ -12,6 +12,11 @@ app_tasks:
     controller: App\Controller\FrontendController\TaskController::show
     methods: ['GET']
 
+app_user_tasks:
+    path: /tasks/user
+    controller: App\Controller\FrontendController\TaskController::showUserTasks
+    methods: ['GET']
+
 #Google OAuth2 routes
 connect_google_start:
     path: /connect/google
@@ -32,6 +37,16 @@ task_create:
     path: /api/tasks
     methods: ['POST']
     controller: App\Controller\ApiController\TaskController::create
+
+task_participate:
+    path: /api/tasks/{taskId}/participate
+    methods: ['GET']
+    controller: App\Controller\ApiController\TaskController::addWorker
+
+task_resign:
+    path: /api/tasks/{taskId}/resign
+    methods: ['GET']
+    controller: App\Controller\ApiController\TaskController::removeWorker
 
 # Goal endpoints
 goal_create:

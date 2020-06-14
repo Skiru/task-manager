@@ -33,3 +33,5 @@ services:
             - [registerHandler, ['App\Application\Goal\Command\CreateGoalCommand', '@App\Application\Goal\Command\CreateGoalCommandHandler']]
             - [registerHandler, ['App\Application\User\Command\PromoteUserCommand', '@App\Application\User\Command\PromoteUserCommandHandler']]
             - [registerHandler, ['App\Application\Task\Command\CreateTaskCommand', '@App\Application\Task\Command\CreateTaskCommandHandler']]
+            - [registerHandler, ['App\Application\Task\Command\AddTaskWorkerCommand', '@App\Application\Task\Command\AddTaskWorkerCommandHandler']]
+            - [registerHandler, ['App\Application\Task\Command\RemoveTaskWorkerCommand', '@App\Application\Task\Command\RemoveTaskWorkerCommandHandler']]

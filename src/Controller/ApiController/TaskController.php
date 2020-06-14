@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller\ApiController;
 
+use App\Application\Task\Command\AddTaskWorkerCommand;
 use App\Application\Task\Command\CreateTaskCommand;
-use App\Domain\Exception\AbstractDomainException;
+use App\Application\Task\Command\RemoveTaskWorkerCommand;
+use App\Application\Task\Query\TaskQueryInterface;
 use App\Infrastructure\CommandBus\CommandBusInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Throwable;
 
 final class TaskController extends AbstractController
 {
@@ -33,15 +36,43 @@ final class TaskController extends AbstractController
             );
 
             $this->bus->handle($command);
-        } catch (AbstractDomainException $exception) {
+        } catch (Throwable $exception) {
             return new JsonResponse([
-                'error' => 'task create failed' . $exception->getMessage()
-            ]);
+                'error' => 'Task create failed because of: ' . $exception->getMessage()
+            ], 400);
         }
 
 
         return new JsonResponse([
-           'task' => 'task created'
+            'task' => 'task created'
+        ]);
+    }
+
+    public function addWorker(int $taskId): JsonResponse
+    {
+        try {
+            $command = new AddTaskWorkerCommand($taskId, $this->getUser());
+            $this->bus->handle($command);
+        } catch (Throwable $exception) {
+            return new JsonResponse(['error' => sprintf('Could not participate in task because of: %s', $exception->getMessage())], 400);
+        }
+
+        return new JsonResponse([
+           'task' => 'Successfully participated in task'
+        ]);
+    }
+
+    public function removeWorker(int $taskId): JsonResponse
+    {
+        try {
+            $command = new RemoveTaskWorkerCommand($taskId, $this->getUser());
+            $this->bus->handle($command);
+        } catch (Throwable $exception) {
+            return new JsonResponse(['error' => sprintf('Could not participate in task because of: %s', $exception->getMessage())], 400);
+        }
+
+        return new JsonResponse([
+            'task' => 'Successfully resigned from a task'
         ]);
     }
 }

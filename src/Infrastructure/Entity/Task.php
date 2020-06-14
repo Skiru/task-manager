@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Infrastructure\Entity;
 
 use DateTime;
-use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @ORM\Entity(repositoryClass="App\Infrastructure\Repository\TaskRepository")
  */
-final class Task
+class Task
 {
     /**
      * @ORM\Column(type="integer")
@@ -22,7 +22,7 @@ final class Task
     private int $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="createdTasks")
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id")
      */
     private User $creator;
@@ -48,14 +48,14 @@ final class Task
     private $goals;
 
     /**
-     * @ORM\OneToMany(targetEntity="User", mappedBy="task")
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="tasks")
      */
     private $workers;
 
     public function __construct()
     {
-        $this->goals = [];
-        $this->workers = [];
+        $this->goals = new ArrayCollection();
+        $this->workers = new ArrayCollection();
     }
 
     public function setCreator($creator): Task
@@ -82,15 +82,88 @@ final class Task
         return $this;
     }
 
-    public function setGoals(array $goals): Task
-    {
-        $this->goals = $goals;
-        return $this;
-    }
-
     public function setWorkers(array $workers): Task
     {
         $this->workers = $workers;
+        return $this;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getCreator(): User
+    {
+        return $this->creator;
+    }
+
+    public function getRequiredWorkers(): int
+    {
+        return $this->requiredWorkers;
+    }
+
+    public function getStartDate(): DateTime
+    {
+        return $this->startDate;
+    }
+
+    public function getEndDate(): DateTime
+    {
+        return $this->endDate;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getWorkers(): Collection
+    {
+        return $this->workers;
+    }
+
+    /**
+     * @return Collection|Goal[]
+     */
+    public function getGoals(): Collection
+    {
+        return $this->goals;
+    }
+
+    public function addGoal(Goal $goal): Task
+    {
+        $this->goals[] = $goal;
+        $goal->setTask($this);
+
+        return $this;
+    }
+
+    /**
+     * @param Goal[] $goals
+     */
+    public function setGoals(array $goals): Task
+    {
+        foreach ($goals as $goal) {
+            $this->addGoal($goal);
+        }
+
+        return $this;
+    }
+
+    public function addWorker(User $user): Task
+    {
+        $this->workers[] = $user;
+        $user->addTask($this);
+
+        return $this;
+    }
+
+    public function removeWorker(User $user): Task
+    {
+        if ($this->workers->contains($user)) {
+            $this->workers->removeElement($user);
+            $user->removeTask($this);
+        }
+
         return $this;
     }
 }

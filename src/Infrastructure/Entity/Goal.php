@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Infrastructure\Repository\UserRepository")
  */
-final class Goal implements \JsonSerializable
+class Goal implements \JsonSerializable
 {
     /**
      * @ORM\Column(type="integer")
@@ -42,7 +42,7 @@ final class Goal implements \JsonSerializable
      * @ORM\ManyToOne(targetEntity="Task", inversedBy="goals")
      * @ORM\JoinColumn(name="task_id", referencedColumnName="id")
      */
-    private $task;
+    private Task $task;
 
     public function setGoalIdentifier(string $goalIdentifier): Goal
     {
@@ -114,7 +114,7 @@ final class Goal implements \JsonSerializable
         return $this->realizationDescription;
     }
 
-    public function getTask()
+    public function getTask(): Task
     {
         return $this->task;
     }

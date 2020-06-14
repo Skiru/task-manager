@@ -1,32 +1,38 @@
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <a class="navbar-brand" href="{{ path('homepage') }}">Task manager</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="{{ path('app_tasks') }}">Tasks list</a>
+                <a class="nav-link" href="{{ path('app_tasks') }}">All tasks</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('app_user_tasks') }}">Your tasks</a>
             </li>
             {% if is_granted('ROLE_SUPERUSER') %}
-            <li class="nav-item">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-target="#taskCreate">
-                    Create task
-                </button>
-            </li>
+                <li class="nav-item">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="static"
+                            data-target="#taskCreate">
+                        Create task
+                    </button>
+                </li>
             {% endif %}
             {% if not is_granted('ROLE_SUPERUSER') %}
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{ path('user_promote', {'userId': app.user.id}) }}">Become a creator</a>
+                    <a class="nav-link active" href="{{ path('user_promote', {'userId': app.user.id}) }}">Become a
+                        creator</a>
                 </li>
             {% endif %}
 
         </ul>
-            <span class="navbar-text">
+        <span class="navbar-text">
               <lead>{{ app.user.username }}</lead>
                 <img class="img img-fluid rounded-circle" width="40px" alt="User picture" src="{{ app.user.picture }}"/>
             </span>
-            <span class="nav-item">
+        <span class="nav-item">
                 <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
             </span>
     </div>
@@ -40,7 +46,8 @@
     {% endfor %}
 {% endfor %}
 
-<div class="modal fade" id="taskCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="taskCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -50,12 +57,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post" action="{{ path('task_create') }}">
+                <form method="post" action="{{ path('task_create') }}" id="js-task-create-form"
+                      data-task-create-url="{{ path('task_create') }}">
                     <input type="hidden" name="creator_id" value="{{ app.user.id }}">
 
                     <div class="form-group">
                         <label for="required_number_of_workers">Required number of workers</label>
-                        <input type="number" name="required_workers" class="form-control" id="required_number_of_workers">
+                        <input type="number" name="required_workers" class="form-control"
+                               id="required_number_of_workers">
                     </div>
                     <div class="form-group">
                         <label for="start_date">Start date</label>
@@ -67,12 +76,12 @@
                     </div>
                     <div class="form-group">
                         <label for="js-goals">Goals</label>
-                        <ul class="list-group list-group-flush" id="js-goals">
-                        </ul>
+                        <div id="js-goals">
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Create task</button>
+                        <button id="js-create-task-btn" type="submit" class="btn btn-primary">Create task</button>
                     </div>
                 </form>
 
@@ -85,7 +94,8 @@
                         </div>
                         <div class="form-group mb-2">
                             <label for="goal_description" class="sr-only">Goal description</label>
-                            <textarea name="realizationDescription" id="goal_description" placeholder="Goal description" class="form-control"></textarea>
+                            <textarea name="realizationDescription" id="goal_description" placeholder="Goal description"
+                                      class="form-control"></textarea>
                         </div>
 
                         <button id="js-create-goal-btn" class="btn btn-sm btn-primary">Create new goal</button>
@@ -99,6 +109,10 @@
 {% block javascripts %}
     <script type="text/javascript">
         $(document).ready(function () {
+            const createTaskBtn = $('#js-create-task-btn');
+            const createTaskForm = $('#js-task-create-form');
+            const createTaskUrl = createTaskForm.data('task-create-url');
+
             const createGoalBtn = $('#js-create-goal-btn');
             const goalCreateForm = $('#js-goal-create-form');
             const createUrl = goalCreateForm.data('create-url');
@@ -117,16 +131,53 @@
                 const request = $.ajax({
                     method: "POST",
                     url: createUrl,
-                    data: JSON.stringify({ name: name, realizationDescription: realizationDescription }),
+                    data: JSON.stringify({name: name, realizationDescription: realizationDescription}),
                     dataType: "json",
                     contentType: 'application/json; charset=utf-8',
                 });
 
                 request.done(function (response) {
-                    goalsContainer.append('<li class="list-group-item">' + response.name + '<input type="hidden" name="goal[]" value="' + response.goal + '"/> </li>')
+                    goalsContainer.append('<div class="my-1 py-1"> <span class="badge badge-primary">' + response.name + '</span><input type="hidden" name="goal[]" value="' + response.goal + '"/></div>')
                 });
 
                 request.fail(function (response) {
+                    alert('Something went wrong:' + response.responseText);
+                });
+
+                return false;
+            });
+
+            createTaskBtn.on('click', function () {
+
+                if (undefined == createTaskForm.find("[name=goal\\[\\]]").val()) {
+                    alert('You didn\'t define any task goal!');
+                    return false;
+                }
+
+                const formData = {
+                    'creator_id': createTaskForm.find("[name=creator_id]").val(),
+                    'required_workers': createTaskForm.find("[name=required_workers]").val(),
+                    'start_date': createTaskForm.find("[name=start_date]").val(),
+                    'end_date': createTaskForm.find("[name=end_date]").val(),
+                    'goal': $("input[name='goal[]']").map(function () {
+                        return $(this).val();
+                    }).get(),
+                };
+
+                let taskRequest = $.ajax({
+                    type: 'POST',
+                    url: createTaskUrl,
+                    data: JSON.stringify(formData),
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                });
+
+                taskRequest.done(function (data) {
+                    alert("Task has been created!");
+                    location.reload();
+                });
+
+                taskRequest.fail(function (response) {
                     alert('Something went wrong:' + response.responseText);
                 });
 

@@ -60,16 +60,6 @@
                                     {% endfor %}
                                     </ul>
                                 </p>
-                                {% if task.workers is empty %}
-                                    <button id="js-participate-in-task" type="button" class="btn btn-dark" data-task-participate-url="{{ absolute_url(path('task_participate', {'taskId':task.id})) }}">Participate in task</button>
-                                {% endif %}
-                                {% for worker in task.workers %}
-                                    {% if worker.id == app.user.id %}
-                                        <button id="js-resign-from-task" type="button" class="btn btn-dark" data-task-resign-url="{{ absolute_url(path('task_resign', {'taskId':task.id})) }}">Resign</button>
-                                    {% else %}
-                                        <button id="js-participate-in-task" type="button" class="btn btn-dark" data-task-participate-url="{{ absolute_url(path('task_participate', {'taskId':task.id})) }}">Participate in task</button>
-                                    {% endif %}
-                                {% endfor %}
                             </div>
                             <div class="card-footer">
                                 <h6 class="text-muted">Start: {{ task.startDate|date('Y-m-d') }}</h6>
@@ -81,50 +71,4 @@
             </div>
         </div>
     </main>
-{% endblock %}
-{% block javascripts %}
-    <script type="text/javascript">
-        $(document).ready(function () {
-            const participateInTaskBtn = $('#js-participate-in-task');
-            const resignFromTaskBtn = $('#js-resign-from-task');
-            const taskParticipateUrl = participateInTaskBtn.data('task-participate-url');
-            const taskResignUrl = participateInTaskBtn.data('task-resign-url');
-
-            participateInTaskBtn.on('click', function () {
-
-                let taskRequest = $.ajax({
-                    type: 'GET',
-                    url: taskParticipateUrl,
-                });
-
-                taskRequest.done(function (data) {
-                    alert("You have joined a task as a worker");
-                    location.reload();
-                });
-
-                taskRequest.fail(function (response) {
-                    alert('Something went wrong:' + response.responseText);
-                });
-
-            });
-
-            resignFromTaskBtn.on('click', function () {
-
-                let request = $.ajax({
-                    type: 'GET',
-                    url: taskResignUrl,
-                });
-
-                request.done(function (data) {
-                    alert("You have resigned from a task");
-                    location.reload();
-                });
-
-                request.fail(function (response) {
-                    alert('Something went wrong:' + response.responseText);
-                });
-
-            });
-        });
-    </script>
 {% endblock %}

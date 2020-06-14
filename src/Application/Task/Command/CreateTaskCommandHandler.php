@@ -8,10 +8,10 @@ use App\Application\Goal\Query\GoalQueryInterface;
 use App\Application\User\Query\UserQueryInterface;
 use App\Domain\Exception\GoalDoesNotExistsException;
 use App\Domain\Exception\NotEnoughWorkersException;
+use App\Domain\Exception\TaskException;
 use App\Domain\Exception\UserDoesNotExistsException;
 use App\Domain\Goal;
 use App\Domain\Goals;
-use App\Domain\Repository\GoalRepositoryInterface;
 use App\Domain\Repository\TaskRepositoryInterface;
 use App\Domain\Task;
 use App\Domain\Workers;
@@ -32,8 +32,10 @@ final class CreateTaskCommandHandler
     }
 
     /**
+     * @param CreateTaskCommand $command
      * @throws GoalDoesNotExistsException
      * @throws NotEnoughWorkersException
+     * @throws TaskException
      * @throws UserDoesNotExistsException
      */
     public function handle(CreateTaskCommand $command): void
@@ -47,11 +49,21 @@ final class CreateTaskCommandHandler
             throw new NotEnoughWorkersException('Task must have at least 1 required worker and no more than 1000!');
         }
 
+        $startDate = DateTimeImmutable::createFromFormat('Y-m-d', $command->getStartDate());
+        if (!$startDate) {
+            throw new TaskException('Invalid start date provided');
+        }
+
+        $endDate = DateTimeImmutable::createFromFormat('Y-m-d', $command->getEndDate());
+        if (!$endDate) {
+            throw new TaskException('Invalid end date provided');
+        }
+
         $task = new Task(
             $user,
             $command->getRequiredWorkers(),
-            DateTimeImmutable::createFromFormat('Y-m-d', $command->getStartDate()),
-            DateTimeImmutable::createFromFormat('Y-m-d', $command->getEndDate()),
+            $startDate,
+            $endDate,
             new Goals($this->getGoals($command->getGoals())),
             new Workers([])
         );
