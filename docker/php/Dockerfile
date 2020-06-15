@@ -24,7 +24,7 @@ RUN apk add --no-cache \
 
 ENV APP_ENV="prod" \
     APP_SECRET="ca6777ca3b9d07d5a38d4f68036f232d" \
-    DATABASE_URL="sqlite:////var/www/html/var/task.db" \
+    DATABASE_URL="sqlite:////var/www/html/data/task.db" \
     OAUTH_GOOGLE_ID="836716831376-p596ng37l4fvdqcdrb10l36balj70v8i.apps.googleusercontent.com" \
     OAUTH_GOOGLE_SECRET="4g2sRN2PtDnlkwgs_ZFWR3zP"
 
