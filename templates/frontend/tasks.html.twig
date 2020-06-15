@@ -17,6 +17,7 @@
                 font-size: 3.5rem;
             }
         }
+
         body {
             min-height: 75rem;
             padding-top: 4.5rem;
@@ -41,11 +42,14 @@
                     {% for task in tasks %}
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title"><img class="img img-fluid rounded-circle" width="40px" alt="User picture" src="{{ task.creator.picture }}"/>  {{ task.creator.name }} </h5>
+                                <h5 class="card-title"><img class="img img-fluid rounded-circle" width="40px"
+                                                            alt="User picture"
+                                                            src="{{ task.creator.picture }}"/> {{ task.creator.name }}
+                                </h5>
                                 <p class="card-text">
                                     <span class="lead text-bold">Goals</span>
                                     <ul class="list-group">
-                                    {% for goal in task.goals %}
+                                        {% for goal in task.goals %}
                                         <li class="list-group-item">
                                             <span class="lead">{{ goal.name }}</span>
                                             <p class="text-break lead">
@@ -57,17 +61,21 @@
                                                 <div class="font-weight-bold text-danger">✗</div>
                                             {% endif %}
                                         </li>
-                                    {% endfor %}
+                                        {% endfor %}
                                     </ul>
                                 </p>
                                 {% if task.workers is empty %}
-                                    <button id="js-participate-in-task" type="button" class="btn btn-dark" data-task-participate-url="{{ absolute_url(path('task_participate', {'taskId':task.id})) }}">Participate in task</button>
+                                    <button id="js-participate-in-task" type="button" class="btn btn-dark"
+                                            data-task-participate-url="{{ absolute_url(path('task_participate', {'taskId':task.id})) }}">
+                                        Participate in task
+                                    </button>
                                 {% endif %}
                                 {% for worker in task.workers %}
-                                    {% if worker.id == app.user.id %}
-                                        <button id="js-resign-from-task" type="button" class="btn btn-dark" data-task-resign-url="{{ absolute_url(path('task_resign', {'taskId':task.id})) }}">Resign</button>
-                                    {% else %}
-                                        <button id="js-participate-in-task" type="button" class="btn btn-dark" data-task-participate-url="{{ absolute_url(path('task_participate', {'taskId':task.id})) }}">Participate in task</button>
+                                    {% if worker.id != app.user.id %}
+                                        <button id="js-participate-in-task" type="button" class="btn btn-dark"
+                                                data-task-participate-url="{{ absolute_url(path('task_participate', {'taskId':task.id})) }}">
+                                            Participate in task
+                                        </button>
                                     {% endif %}
                                 {% endfor %}
                             </div>
@@ -85,10 +93,8 @@
 {% block javascripts %}
     <script type="text/javascript">
         $(document).ready(function () {
-            const participateInTaskBtn = $('#js-participate-in-task');
-            const resignFromTaskBtn = $('#js-resign-from-task');
+            const participateInTaskBtn = $("#js-participate-in-task");
             const taskParticipateUrl = participateInTaskBtn.data('task-participate-url');
-            const taskResignUrl = participateInTaskBtn.data('task-resign-url');
 
             participateInTaskBtn.on('click', function () {
 
@@ -106,24 +112,7 @@
                     alert('Something went wrong:' + response.responseText);
                 });
 
-            });
-
-            resignFromTaskBtn.on('click', function () {
-
-                let request = $.ajax({
-                    type: 'GET',
-                    url: taskResignUrl,
-                });
-
-                request.done(function (data) {
-                    alert("You have resigned from a task");
-                    location.reload();
-                });
-
-                request.fail(function (response) {
-                    alert('Something went wrong:' + response.responseText);
-                });
-
+                return false;
             });
         });
     </script>

@@ -60,6 +60,14 @@
                                     {% endfor %}
                                     </ul>
                                 </p>
+                                {% for worker in task.workers %}
+                                    {% if worker.id == app.user.id %}
+                                        <button id="js-resign-from-task" type="button" class="btn btn-dark"
+                                                data-task-resign-url="{{ absolute_url(path('task_resign', {'taskId':task.id})) }}">
+                                            Resign
+                                        </button>
+                                    {% endif %}
+                                {% endfor %}
                             </div>
                             <div class="card-footer">
                                 <h6 class="text-muted">Start: {{ task.startDate|date('Y-m-d') }}</h6>
@@ -71,4 +79,30 @@
             </div>
         </div>
     </main>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            const resignFromTaskBtn = $("#js-resign-from-task");
+            const taskResignUrl = resignFromTaskBtn.data('task-resign-url');
+
+            resignFromTaskBtn.on('click', function () {
+                let r = $.ajax({
+                    type: 'GET',
+                    url: taskResignUrl,
+                });
+
+                r.done(function (data) {
+                    alert("You have resigned from a task");
+                    location.reload();
+                });
+
+                r.fail(function (response) {
+                    alert('Something went wrong:' + response.responseText);
+                });
+
+                return false;
+            });
+        });
+    </script>
 {% endblock %}

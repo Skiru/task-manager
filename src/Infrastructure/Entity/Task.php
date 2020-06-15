@@ -49,6 +49,7 @@ class Task
 
     /**
      * @ORM\ManyToMany(targetEntity="User", inversedBy="tasks")
+     * @ORM\JoinTable(name="task_user")
      */
     private $workers;
 
@@ -159,10 +160,8 @@ class Task
 
     public function removeWorker(User $user): Task
     {
-        if ($this->workers->contains($user)) {
-            $this->workers->removeElement($user);
-            $user->removeTask($this);
-        }
+        $this->workers->removeElement($user);
+        $user->removeTask($this);
 
         return $this;
     }

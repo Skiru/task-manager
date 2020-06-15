@@ -77,11 +77,10 @@ final class TaskRepository extends ServiceEntityRepository implements TaskReposi
 
     public function removeWorker(Task $task, User $user): void
     {
-        $entityTask = $this->findOneById($task->getId());
-        $entityTask->removeWorker($user);
+        $task->removeWorker($user);
 
-        $this->entityManager->persist($user);
         $this->entityManager->persist($task);
+        $this->entityManager->persist($user);
         $this->entityManager->flush();
     }
 }

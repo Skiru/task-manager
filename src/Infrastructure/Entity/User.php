@@ -221,9 +221,7 @@ class User implements UserInterface
 
     public function removeTask(Task $task): User
     {
-        if ($this->tasks->contains($task)) {
-            $this->tasks->removeElement($task);
-        }
+        $this->tasks->removeElement($task);
 
         return $this;
     }
