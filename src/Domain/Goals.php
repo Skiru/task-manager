@@ -48,13 +48,17 @@ final class Goals
      */
     public function markAsFinished(Goal $goal): void
     {
-        if (!isset($this->goals[$goal->getGoalIdentifier()->toString()])) {
-            throw new GoalDoesNotExistsException(
-                'Goal you would like to mark as finished does not exist or does not belong to that task!'
-            );
+        foreach ($this->goals as $g) {
+            if ($g->getGoalIdentifier()->equals($goal->getGoalIdentifier())) {
+                $g->markAsFinished();
+
+                return;
+            }
         }
 
-        $this->goals[$goal->getGoalIdentifier()->toString()]->markAsFinished();
+        throw new GoalDoesNotExistsException(
+            'Goal you would like to mark as finished does not exist or does not belong to that task!'
+        );
     }
 
     /**

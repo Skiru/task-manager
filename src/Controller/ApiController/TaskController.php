@@ -9,6 +9,7 @@ use App\Application\Task\Command\CreateTaskCommand;
 use App\Application\Task\Command\RemoveTaskWorkerCommand;
 use App\Application\Task\Query\TaskQueryInterface;
 use App\Infrastructure\CommandBus\CommandBusInterface;
+use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,8 +27,11 @@ final class TaskController extends AbstractController
     public function create(Request $request): JsonResponse
     {
         try {
+            $uuid = Uuid::uuid4()->toString();
+
             $content = json_decode($request->getContent(), true);
             $command = new CreateTaskCommand(
+                $uuid,
                 (int)$content['creator_id'],
                 (int)$content['required_workers'],
                 $content['start_date'],

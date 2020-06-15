@@ -34,8 +34,9 @@ final class AddTaskWorkerCommandHandler
             throw new TaskException('Task not found exception!');
         }
 
-        $this->taskFactory->createFromEntity($taskEntity)->addWorker($command->getUser());
+        $task = $this->taskFactory->createFromEntity($taskEntity);
+        $task->addWorker($command->getUser());
 
-        $this->taskRepository->addWorker($taskEntity, $command->getUser());
+        $this->taskRepository->addWorker($task, $command->getUser());
     }
 }

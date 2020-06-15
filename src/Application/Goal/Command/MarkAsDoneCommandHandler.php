@@ -50,7 +50,8 @@ final class MarkAsDoneCommandHandler
             throw new TaskException('Task does not exist!');
         }
 
-        $this->taskFactory->createFromEntity($task)->markGoalAsFinished($domainGoal);
+        $task = $this->taskFactory->createFromEntity($task);
+        $task->markGoalAsFinished($domainGoal);
 
         $this->goalRepository->markAsDone($domainGoal);
     }

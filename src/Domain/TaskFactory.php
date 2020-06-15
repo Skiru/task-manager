@@ -25,6 +25,7 @@ final class TaskFactory
         $domainWorkers = new Workers($task->getWorkers()->toArray());
 
         return new Task(
+            Uuid::fromString($task->getUuid()),
             $task->getCreator(),
             $task->getRequiredWorkers(),
             new DateTimeImmutable($task->getStartDate()->format('Y-m-d H:i:s')),

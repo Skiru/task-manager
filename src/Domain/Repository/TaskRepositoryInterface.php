@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Domain\Repository;
 
 use App\Domain\Task;
-use App\Infrastructure\Entity\Task as InfrastructureTask;
 use App\Infrastructure\Entity\User;
 
 interface TaskRepositoryInterface

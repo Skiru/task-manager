@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200614201311 extends AbstractMigration
+final class Version20200615214207 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,7 +22,7 @@ final class Version20200614201311 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'sqlite', 'Migration can only be executed safely on \'sqlite\'.');
 
-        $this->addSql('CREATE TABLE task (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, creator_id INTEGER DEFAULT NULL, required_workers INTEGER NOT NULL, start_date DATETIME NOT NULL, end_date DATETIME NOT NULL)');
+        $this->addSql('CREATE TABLE task (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, creator_id INTEGER DEFAULT NULL, uuid VARCHAR(36) NOT NULL, required_workers INTEGER NOT NULL, start_date DATETIME NOT NULL, end_date DATETIME NOT NULL)');
         $this->addSql('CREATE INDEX IDX_527EDB2561220EA6 ON task (creator_id)');
         $this->addSql('CREATE TABLE task_user (task_id INTEGER NOT NULL, user_id INTEGER NOT NULL, PRIMARY KEY(task_id, user_id))');
         $this->addSql('CREATE INDEX IDX_FE2042328DB60186 ON task_user (task_id)');

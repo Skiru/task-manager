@@ -40,6 +40,7 @@ final class TaskRepository extends ServiceEntityRepository implements TaskReposi
 
         $task = new Task();
         $task
+            ->setUuid($domainTask->getIdentifier()->toString())
             ->setStartDate(new DateTime($domainTask->getStartDate()->format('Y-m-d H:i:s')))
             ->setEndDate(new DateTime($domainTask->getEndDate()->format('Y-m-d H:i:s')))
             ->setRequiredWorkers($domainTask->getRequiredWorkers())

@@ -42,12 +42,12 @@ final class Task
 
     public function isStarted(): bool
     {
-        return $this->startDate > new DateTimeImmutable();
+        return $this->startDate < new DateTimeImmutable();
     }
 
     public function isFinished(): bool
     {
-        return $this->endDate >= new DateTimeImmutable();
+        return $this->endDate <= new DateTimeImmutable();
     }
 
     /**
@@ -174,10 +174,6 @@ final class Task
         return $this->goals;
     }
 
-    public function getWorkers(): Workers
-    {
-        return $this->workers;
-    }
 
     public function getIdentifier(): UuidInterface
     {
