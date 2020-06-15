@@ -6,6 +6,7 @@ namespace App\Infrastructure\Repository;
 
 use App\Application\Goal\Query\GoalQueryInterface;
 use App\Application\Task\Query\TaskQueryInterface;
+use App\Domain\Goal;
 use App\Domain\Repository\TaskRepositoryInterface;
 use App\Domain\Task as DomainTask;
 use App\Infrastructure\Entity\Task;
@@ -14,6 +15,8 @@ use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 final class TaskRepository extends ServiceEntityRepository implements TaskRepositoryInterface, TaskQueryInterface
 {
@@ -65,21 +68,29 @@ final class TaskRepository extends ServiceEntityRepository implements TaskReposi
         return $this->findOneBy(['id' => $id]);
     }
 
-    public function addWorker(Task $task, User $user): void
+    public function findByIdentifier(UuidInterface $uuid): ?Task
     {
-        $entityTask = $this->findOneById($task->getId());
-        $entityTask->addWorker($user);
+        return $this->findOneBy(['uuid' => $uuid->toString()]);
+    }
 
-        $this->entityManager->persist($task);
+    public function addWorker(DomainTask $task, User $user): void
+    {
+        $entityTask = $this->findByIdentifier($task->getIdentifier());
+        $entityTask
+            ->addWorker($user)
+            ->setStartDate(new DateTime($task->getStartDate()->format('Y-m-d H:i:s')));
+
+        $this->entityManager->persist($entityTask);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
     }
 
-    public function removeWorker(Task $task, User $user): void
+    public function removeWorker(DomainTask $task, User $user): void
     {
-        $task->removeWorker($user);
+        $taskEntity = $this->findByIdentifier($task->getIdentifier());
+        $taskEntity->removeWorker($user);
 
-        $this->entityManager->persist($task);
+        $this->entityManager->persist($taskEntity);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
     }

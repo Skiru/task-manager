@@ -6,14 +6,16 @@ namespace App\Application\Task\Command;
 
 final class CreateTaskCommand
 {
+    private string $identifier;
     private int $creator_id;
     private int $requiredWorkers;
     private string $startDate;
     private string $endDate;
     private array $goals;
 
-    public function __construct(int $creator_id, int $requiredWorkers, string $startDate, string $endDate, array $goals)
+    public function __construct(string $identifier, int $creator_id, int $requiredWorkers, string $startDate, string $endDate, array $goals)
     {
+        $this->identifier = $identifier;
         $this->creator_id = $creator_id;
         $this->requiredWorkers = $requiredWorkers;
         $this->startDate = $startDate;
@@ -44,5 +46,10 @@ final class CreateTaskCommand
     public function getGoals(): array
     {
         return $this->goals;
+    }
+
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
     }
 }

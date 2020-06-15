@@ -63,3 +63,8 @@ goal_find_all:
     path: /api/goals
     methods: ['GET']
     controller: App\Controller\ApiController\GoalController::findAll
+
+goal_mark_as_done:
+    path: /api/goals/{uuid}/done
+    methods: ['GET']
+    controller: App\Controller\ApiController\GoalController::markAsDone

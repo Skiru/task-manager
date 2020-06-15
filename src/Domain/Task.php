@@ -9,9 +9,12 @@ use App\Domain\Exception\NotPermittedOperation;
 use App\Domain\Exception\TaskAlreadyStartedException;
 use App\Infrastructure\Entity\User;
 use DateTimeImmutable;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 final class Task
 {
+    private UuidInterface $identifier;
     private User $creator;
     private int $requiredWorkers;
     private DateTimeImmutable $startDate;
@@ -20,6 +23,7 @@ final class Task
     private Workers $workers;
 
     public function __construct(
+        UuidInterface $uuid,
         User $creator,
         int $requiredWorkers,
         DateTimeImmutable $startDate,
@@ -27,6 +31,7 @@ final class Task
         Goals $goals,
         Workers $workers
     ) {
+        $this->identifier = $uuid;
         $this->creator = $creator;
         $this->requiredWorkers = $requiredWorkers;
         $this->startDate = $startDate;
@@ -172,5 +177,10 @@ final class Task
     public function getWorkers(): Workers
     {
         return $this->workers;
+    }
+
+    public function getIdentifier(): UuidInterface
+    {
+        return $this->identifier;
     }
 }

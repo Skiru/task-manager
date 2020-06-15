@@ -12,7 +12,7 @@ interface TaskRepositoryInterface
 {
     public function add(Task $task): void;
 
-    public function addWorker(InfrastructureTask $task, User $user): void;
+    public function addWorker(Task $task, User $user): void;
 
-    public function removeWorker(InfrastructureTask $task, User $user): void;
+    public function removeWorker(Task $task, User $user): void;
 }

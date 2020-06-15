@@ -36,3 +36,4 @@ COPY ./ /var/www/html
 COPY --from=composer-prod /app/vendor /var/www/html/vendor
 
 RUN chmod 777 -R /var/www/html
+RUN chown /var/www/html/var/task.db 1000

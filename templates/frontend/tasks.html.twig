@@ -65,14 +65,14 @@
                                     </ul>
                                 </p>
                                 {% if task.workers is empty %}
-                                    <button id="js-participate-in-task" type="button" class="btn btn-dark"
+                                    <button class="btn btn-dark js-participate-in-task" type="button"
                                             data-task-participate-url="{{ absolute_url(path('task_participate', {'taskId':task.id})) }}">
                                         Participate in task
                                     </button>
                                 {% endif %}
                                 {% for worker in task.workers %}
                                     {% if worker.id != app.user.id %}
-                                        <button id="js-participate-in-task" type="button" class="btn btn-dark"
+                                        <button class="btn btn-dark js-participate-in-task" type="button"
                                                 data-task-participate-url="{{ absolute_url(path('task_participate', {'taskId':task.id})) }}">
                                             Participate in task
                                         </button>
@@ -93,10 +93,10 @@
 {% block javascripts %}
     <script type="text/javascript">
         $(document).ready(function () {
-            const participateInTaskBtn = $("#js-participate-in-task");
-            const taskParticipateUrl = participateInTaskBtn.data('task-participate-url');
+            let participateInTaskBtn = $(".js-participate-in-task");
 
             participateInTaskBtn.on('click', function () {
+                let taskParticipateUrl = $(this).data('task-participate-url');
 
                 let taskRequest = $.ajax({
                     type: 'GET',

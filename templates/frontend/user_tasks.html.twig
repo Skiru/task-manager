@@ -55,6 +55,14 @@
                                                 <div class="font-weight-bold text-success">✓</div>
                                             {% else %}
                                                 <div class="font-weight-bold text-danger">✗</div>
+                                                {% for worker in task.workers %}
+                                                    {% if worker.id == app.user.id %}
+                                                    <button class="badge badge-info js-goal-mark-as-done" type="button"
+                                                            data-goal-mark-as-done-url="{{ absolute_url(path('goal_mark_as_done', {'uuid':goal.goalIdentifier})) }}">
+                                                        mark done
+                                                    </button>
+                                                    {% endif %}
+                                                {% endfor %}
                                             {% endif %}
                                         </li>
                                     {% endfor %}
@@ -62,7 +70,7 @@
                                 </p>
                                 {% for worker in task.workers %}
                                     {% if worker.id == app.user.id %}
-                                        <button id="js-resign-from-task" type="button" class="btn btn-dark"
+                                        <button class="btn btn-dark js-resign-from-task" type="button"
                                                 data-task-resign-url="{{ absolute_url(path('task_resign', {'taskId':task.id})) }}">
                                             Resign
                                         </button>
@@ -83,10 +91,12 @@
 {% block javascripts %}
     <script type="text/javascript">
         $(document).ready(function () {
-            const resignFromTaskBtn = $("#js-resign-from-task");
-            const taskResignUrl = resignFromTaskBtn.data('task-resign-url');
+            const resignFromTaskBtn = $(".js-resign-from-task");
+            const goalMarkAsDoneBtn = $(".js-goal-mark-as-done");
 
             resignFromTaskBtn.on('click', function () {
+                const taskResignUrl = $(this).data('task-resign-url');
+
                 let r = $.ajax({
                     type: 'GET',
                     url: taskResignUrl,
@@ -94,6 +104,26 @@
 
                 r.done(function (data) {
                     alert("You have resigned from a task");
+                    location.reload();
+                });
+
+                r.fail(function (response) {
+                    alert('Something went wrong:' + response.responseText);
+                });
+
+                return false;
+            });
+
+            goalMarkAsDoneBtn.on('click', function () {
+                const goalMarkAsDoneUrl = $(this).data('goal-mark-as-done-url');
+
+                let r = $.ajax({
+                    type: 'GET',
+                    url: goalMarkAsDoneUrl,
+                });
+
+                r.done(function (data) {
+                    alert("You have just marked a goal as finished! Congratulations!");
                     location.reload();
                 });
 

@@ -22,6 +22,11 @@ class Task
     private int $id;
 
     /**
+     * @ORM\Column(type="string", length=36)
+     */
+    private string $uuid;
+
+    /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="createdTasks")
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id")
      */
@@ -163,6 +168,17 @@ class Task
         $this->workers->removeElement($user);
         $user->removeTask($this);
 
+        return $this;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
+    }
+
+    public function setUuid(string $uuid): Task
+    {
+        $this->uuid = $uuid;
         return $this;
     }
 }

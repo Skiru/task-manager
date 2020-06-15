@@ -35,3 +35,4 @@ services:
             - [registerHandler, ['App\Application\Task\Command\CreateTaskCommand', '@App\Application\Task\Command\CreateTaskCommandHandler']]
             - [registerHandler, ['App\Application\Task\Command\AddTaskWorkerCommand', '@App\Application\Task\Command\AddTaskWorkerCommandHandler']]
             - [registerHandler, ['App\Application\Task\Command\RemoveTaskWorkerCommand', '@App\Application\Task\Command\RemoveTaskWorkerCommandHandler']]
+            - [registerHandler, ['App\Application\Goal\Command\MarkAsDoneCommand', '@App\Application\Goal\Command\MarkAsDoneCommandHandler']]

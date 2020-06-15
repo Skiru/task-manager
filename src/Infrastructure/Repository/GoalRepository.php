@@ -6,9 +6,9 @@ namespace App\Infrastructure\Repository;
 
 use App\Application\Goal\Query\GoalQueryInterface;
 use App\Domain\Goal as DomainGoal;
-use App\Domain\Goals;
 use App\Domain\Repository\GoalRepositoryInterface;
 use App\Infrastructure\Entity\Goal;
+use App\Infrastructure\Entity\Task;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -45,5 +45,24 @@ final class GoalRepository extends ServiceEntityRepository implements GoalReposi
     public function findByIdentifier(UuidInterface $uuid): ?Goal
     {
         return $this->findOneBy(['goalIdentifier' => $uuid->toString()]);
+    }
+
+    public function markAsDone(DomainGoal $goal): void
+    {
+        $goal = $this->findByIdentifier($goal->getGoalIdentifier());
+        $goal->setIsFinished(true);
+
+        $this->entityManager->persist($goal);
+        $this->entityManager->flush();
+    }
+
+    public function findTaskByGoal(DomainGoal $goal): ?Task
+    {
+        $goalEntity = $this->findByIdentifier($goal->getGoalIdentifier());
+        if (null === $goalEntity) {
+            return null;
+        }
+
+        return $goalEntity->getTask();
     }
 }

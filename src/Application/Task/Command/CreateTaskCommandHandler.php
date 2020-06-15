@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Application\Task\Command;
 
 use App\Application\Goal\Query\GoalQueryInterface;
+use App\Application\Task\Query\TaskQueryInterface;
 use App\Application\User\Query\UserQueryInterface;
 use App\Domain\Exception\GoalDoesNotExistsException;
 use App\Domain\Exception\NotEnoughWorkersException;
@@ -23,12 +24,14 @@ final class CreateTaskCommandHandler
     private UserQueryInterface $userQuery;
     private GoalQueryInterface $goalQuery;
     private TaskRepositoryInterface $taskRepository;
+    private TaskQueryInterface $taskQuery;
 
-    public function __construct(UserQueryInterface $userQuery, GoalQueryInterface $goalQuery, TaskRepositoryInterface $taskRepository)
+    public function __construct(UserQueryInterface $userQuery, GoalQueryInterface $goalQuery, TaskRepositoryInterface $taskRepository, TaskQueryInterface $taskQuery)
     {
         $this->userQuery = $userQuery;
         $this->goalQuery = $goalQuery;
         $this->taskRepository = $taskRepository;
+        $this->taskQuery = $taskQuery;
     }
 
     /**
@@ -59,7 +62,13 @@ final class CreateTaskCommandHandler
             throw new TaskException('Invalid end date provided');
         }
 
+        $taskUuid = Uuid::fromString($command->getIdentifier());
+        if (null !== $this->taskQuery->findByIdentifier($taskUuid)) {
+            throw new TaskException('Task with the same id already exists!');
+        }
+
         $task = new Task(
+            $taskUuid,
             $user,
             $command->getRequiredWorkers(),
             $startDate,
