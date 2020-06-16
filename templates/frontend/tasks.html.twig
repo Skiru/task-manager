@@ -41,10 +41,10 @@
                 {% else %}
                     {% for task in tasks %}
                         <div class="card">
-                                {% if task.started %}
-                                     <div class="card-header bg-success text-white font-weight-bold">Task started</div>
-                                {% elseif task.finished %}
+                                {% if task.finished %}
                                     <div class="card-header bg-secondary text-white font-weight-bold">Task finished</div>
+                                {% elseif task.started %}
+                                    <div class="card-header bg-success text-white font-weight-bold">Task started</div>
                                 {% else %}
                                     <div class="card-header bg-dark text-white font-weight-bold">Task not started</div>
                                 {% endif %}
