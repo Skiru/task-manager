@@ -181,4 +181,14 @@ class Task
         $this->uuid = $uuid;
         return $this;
     }
+
+    public function isStarted(): bool
+    {
+        return $this->getStartDate() < new DateTime();
+    }
+
+    public function isFinished(): bool
+    {
+        return $this->getEndDate() <= new DateTime();
+    }
 }

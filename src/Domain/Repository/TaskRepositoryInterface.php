@@ -14,4 +14,6 @@ interface TaskRepositoryInterface
     public function addWorker(Task $task, User $user): void;
 
     public function removeWorker(Task $task, User $user): void;
+
+    public function updateEndDate(Task $task): void;
 }

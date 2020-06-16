@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\FrontendController;
 
 use App\Application\Task\Query\TaskQueryInterface;
+use App\Application\User\Query\UserQueryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -28,7 +29,7 @@ class TaskController extends AbstractController
 
     public function showUserTasks(): Response
     {
-        $tasks = $this->taskQuery->findByCreator($this->getUser());
+        $tasks = $this->taskQuery->findTasks($this->getUser());
 
         return $this->render('frontend/user_tasks.html.twig', [
             'tasks' => $tasks

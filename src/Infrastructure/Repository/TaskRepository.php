@@ -14,7 +14,6 @@ use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
 final class TaskRepository extends ServiceEntityRepository implements TaskRepositoryInterface, TaskQueryInterface
@@ -55,7 +54,7 @@ final class TaskRepository extends ServiceEntityRepository implements TaskReposi
 
     public function findAll(): array
     {
-        return $this->findBy([]);
+        return $this->findBy([], ['startDate' => 'ASC']);
     }
 
     public function findByCreator(User $user): array
@@ -92,6 +91,33 @@ final class TaskRepository extends ServiceEntityRepository implements TaskReposi
 
         $this->entityManager->persist($taskEntity);
         $this->entityManager->persist($user);
+        $this->entityManager->flush();
+    }
+
+    public function findTasks(User $user): array
+    {
+        $workersTasks = $this->createQueryBuilder('task')
+            ->innerJoin(User::class, 'u', 'WITH', ':user_id MEMBER OF task.workers')
+            ->setParameter('user_id', $user->getId())
+            ->getQuery()
+            ->getResult();
+
+        $creatorsTasks = $this->findBy(['creator' => $user->getId()]);
+
+        $tasks = array_merge($workersTasks, $creatorsTasks);
+        usort($tasks, function (Task $task1, Task $task2) {
+            return $task1->getStartDate() > $task2->getStartDate();
+        });
+
+        return $tasks;
+    }
+
+    public function updateEndDate(DomainTask $task): void
+    {
+        $entityTask = $this->findByIdentifier($task->getIdentifier());
+        $entityTask->setEndDate(new DateTime($task->getEndDate()->format('Y-m-d H:i:s')));
+
+        $this->entityManager->persist($entityTask);
         $this->entityManager->flush();
     }
 }

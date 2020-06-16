@@ -6,7 +6,6 @@ namespace App\Application\Task\Query;
 
 use App\Infrastructure\Entity\Task;
 use App\Infrastructure\Entity\User;
-use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
 interface TaskQueryInterface
@@ -24,4 +23,9 @@ interface TaskQueryInterface
     public function findOneById(int $id): ?Task;
 
     public function findByIdentifier(UuidInterface $uuid): ?Task;
+
+    /**
+     * @return Task[]
+     */
+    public function findTasks(User $user): array;
 }

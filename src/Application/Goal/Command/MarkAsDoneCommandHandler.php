@@ -10,6 +10,7 @@ use App\Domain\Exception\TaskAlreadyStartedException;
 use App\Domain\Exception\TaskException;
 use App\Domain\Goal;
 use App\Domain\Repository\GoalRepositoryInterface;
+use App\Domain\Repository\TaskRepositoryInterface;
 use App\Domain\TaskFactory;
 use Ramsey\Uuid\Uuid;
 
@@ -18,15 +19,18 @@ final class MarkAsDoneCommandHandler
     private GoalQueryInterface $goalQuery;
     private TaskFactory $taskFactory;
     private GoalRepositoryInterface $goalRepository;
+    private TaskRepositoryInterface $taskRepository;
 
     public function __construct(
         GoalQueryInterface $goalQuery,
         TaskFactory $taskFactory,
-        GoalRepositoryInterface $goalRepository
+        GoalRepositoryInterface $goalRepository,
+        TaskRepositoryInterface $taskRepository
     ) {
         $this->goalQuery = $goalQuery;
         $this->taskFactory = $taskFactory;
         $this->goalRepository = $goalRepository;
+        $this->taskRepository = $taskRepository;
     }
 
     /**
@@ -54,5 +58,8 @@ final class MarkAsDoneCommandHandler
         $task->markGoalAsFinished($domainGoal);
 
         $this->goalRepository->markAsDone($domainGoal);
+        if ($task->isFinished()) {
+            $this->taskRepository->updateEndDate($task);
+        }
     }
 }

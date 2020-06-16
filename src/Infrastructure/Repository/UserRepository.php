@@ -6,10 +6,12 @@ namespace App\Infrastructure\Repository;
 
 use App\Application\User\Query\UserQueryInterface;
 use App\Domain\Repository\UserRepositoryInterface;
+use App\Infrastructure\Entity\Task;
 use App\Infrastructure\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 final class UserRepository extends ServiceEntityRepository implements UserQueryInterface, UserRepositoryInterface
 {

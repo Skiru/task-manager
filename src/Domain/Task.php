@@ -85,7 +85,7 @@ final class Task
     {
         if ($this->isStarted() || $this->isFinished()) {
             throw new TaskAlreadyStartedException(
-                'Task has already started, you can not add any new worker!'
+                sprintf('Task has already %s, you can not add any new worker!', $this->isStarted() ? 'started' : 'finished')
             );
         }
 
@@ -103,7 +103,7 @@ final class Task
     {
         if ($this->isStarted() || $this->isFinished()) {
             throw new TaskAlreadyStartedException(
-                'Task has already started, you can not remove any new worker!'
+                sprintf('Task has already %s, you can not remove any new worker!', $this->isStarted() ? 'started' : 'finished')
             );
         }
 
