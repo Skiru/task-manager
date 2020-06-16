@@ -34,8 +34,9 @@ final class RemoveTaskWorkerCommandHandler
             throw new TaskException('Task not found exception!');
         }
 
-        $this->taskFactory->createFromEntity($taskEntity)->removeWorker($command->getUser());
+        $task = $this->taskFactory->createFromEntity($taskEntity);
+        $task->removeWorker($command->getUser());
 
-        $this->taskRepository->removeWorker($taskEntity, $command->getUser());
+        $this->taskRepository->removeWorker($task, $command->getUser());
     }
 }

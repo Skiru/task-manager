@@ -35,7 +35,6 @@ final class CreateTaskCommandHandler
     }
 
     /**
-     * @param CreateTaskCommand $command
      * @throws GoalDoesNotExistsException
      * @throws NotEnoughWorkersException
      * @throws TaskException

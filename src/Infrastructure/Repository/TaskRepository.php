@@ -6,7 +6,6 @@ namespace App\Infrastructure\Repository;
 
 use App\Application\Goal\Query\GoalQueryInterface;
 use App\Application\Task\Query\TaskQueryInterface;
-use App\Domain\Goal;
 use App\Domain\Repository\TaskRepositoryInterface;
 use App\Domain\Task as DomainTask;
 use App\Infrastructure\Entity\Task;
