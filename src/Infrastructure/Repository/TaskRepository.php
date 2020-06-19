@@ -104,7 +104,7 @@ final class TaskRepository extends ServiceEntityRepository implements TaskReposi
 
         $creatorsTasks = $this->findBy(['creator' => $user->getId()]);
 
-        $tasks = array_merge($workersTasks, $creatorsTasks);
+        $tasks = array_unique(array_merge($workersTasks, $creatorsTasks));
         usort($tasks, function (Task $task1, Task $task2) {
             return $task1->getStartDate() > $task2->getStartDate();
         });
