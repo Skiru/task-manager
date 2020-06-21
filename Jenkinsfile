@@ -28,6 +28,9 @@ pipeline {
           steps{
             script {
               dockerTestImage = docker.build("task-manager-test-container", "-f ./docker/php/Dockerfile-dev . --no-cache=true")
+              dockerTestImage.withRun() {
+                    container -> sh "ls -al"
+              }
             }
           }
         }
