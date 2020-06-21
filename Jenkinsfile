@@ -27,10 +27,7 @@ pipeline {
         stage('Building test image') {
           steps{
             script {
-              dockerTestImage = docker.build("task-manager-test-container", "-f ./docker/php/Dockerfile-dev . --no-cache=true")
-              dockerTestImage.withRun("-v ./:/var/www/html") { container ->
-                sh "docker exec ${container.id} composer install"
-              }
+              dockerTestImage = docker.build("task-manager-test-container", "--target ci-dev -f ./docker/php/Dockerfile .")
             }
           }
         }
@@ -38,7 +35,7 @@ pipeline {
         stage('Run unit tests') {
             steps{
                 script{
-                    dockerTestImage.withRun("--env-file=./.env.dist -v ./:/var/www/html") { container ->
+                    dockerTestImage.withRun("--env-file=./.env.dist") { container ->
                         sh "docker exec ${container.id} php ./bin/phpunit -c ./phpunit.xml.dist"
                     }
                 }
