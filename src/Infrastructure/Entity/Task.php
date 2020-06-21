@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Task
 {
+
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -190,5 +191,10 @@ class Task
     public function isFinished(): bool
     {
         return $this->getEndDate() <= new DateTime();
+    }
+
+    public function __toString(): string
+    {
+        return $this->uuid;
     }
 }

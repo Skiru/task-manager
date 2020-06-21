@@ -98,11 +98,15 @@ final class TaskRepository extends ServiceEntityRepository implements TaskReposi
     {
         $workersTasks = $this->createQueryBuilder('task')
             ->innerJoin(User::class, 'u', 'WITH', ':user_id MEMBER OF task.workers')
-            ->setParameter('user_id', $user->getId())
+            ->setParameters([
+                'user_id' => $user->getId()
+            ])
             ->getQuery()
             ->getResult();
 
         $creatorsTasks = $this->findBy(['creator' => $user->getId()]);
+
+//        dump(array_merge($workersTasks, $creatorsTasks));die;
 
         $tasks = array_unique(array_merge($workersTasks, $creatorsTasks));
         usort($tasks, function (Task $task1, Task $task2) {
