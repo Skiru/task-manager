@@ -16,7 +16,6 @@ COPY /templates ./templates
 COPY /tests ./tests
 COPY /composer.json ./
 COPY /composer.lock ./
-COPY /.env ./.env
 COPY /.env.dist ./.env.dist
 COPY /.env.test ./.env.test
 COPY /phpunit.xml.dist ./phpunit.xml.dist
