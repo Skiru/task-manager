@@ -5,6 +5,7 @@ pipeline {
         registry = "mkoziol/purpleclouds"
         registryCredential = 'dockerhub'
         dockerPhpImage = ''
+        dockerTestImage = ''
         containerName = 'task-manager-php'
     }
 
@@ -20,6 +21,24 @@ pipeline {
                      submoduleCfg: [],
                      userRemoteConfigs: [[credentialsId: 'task_manager_repository', url: "git@github.com:Skiru/task-manager.git"]]]
                 )
+            }
+        }
+
+        stage('Building test image') {
+          steps{
+            script {
+              dockerTestImage = docker.build("task-manager-test-container", "-f ./docker/php/Dockerfile-dev . --no-cache=true")
+            }
+          }
+        }
+
+        stage('Run unit tests') {
+            steps{
+                script{
+                    testPhpImage.withRun("--env-file=./.env.dist") { container ->
+                        sh "docker exec ${container.id} php ./bin/phpunit -c ./phpunit.xml.dist"
+                    }
+                }
             }
         }
 
