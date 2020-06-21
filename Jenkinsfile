@@ -36,7 +36,7 @@ pipeline {
             steps{
                 script{
                     dockerTestImage.withRun("--env-file=./.env.dist") { container ->
-                        sh "docker exec ${container.id} php ./bin/phpunit -c ./phpunit.xml.dist"
+                        sh "docker exec ${container.containerName} php ./bin/phpunit -c ./phpunit.xml.dist"
                     }
                 }
             }
