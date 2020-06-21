@@ -36,7 +36,7 @@ pipeline {
             steps{
                 script{
                     docker.image('task-manager-test-container:latest').withRun { container ->
-                        sh "docker exec task-manager-test-container php ./bin/phpunit -c ./phpunit.xml.dist"
+                        sh "docker exec ${container.containerName} php ./bin/phpunit -c ./phpunit.xml.dist"
                     }
                 }
             }
