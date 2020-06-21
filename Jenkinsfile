@@ -28,8 +28,8 @@ pipeline {
           steps{
             script {
               dockerTestImage = docker.build("task-manager-test-container", "-f ./docker/php/Dockerfile-dev . --no-cache=true")
-              dockerTestImage.withRun() {
-                    container -> sh "ls -al"
+              dockerTestImage.withRun() { container ->
+                sh "docker exec ${container.id} composer install"
               }
             }
           }
