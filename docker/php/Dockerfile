@@ -2,6 +2,7 @@ FROM composer as composer-dev
 WORKDIR /app
 COPY ./composer.json ./
 COPY ./composer.lock ./
+RUN composer install --no-scripts --ignore-platform-reqs
 
 FROM php:7.4-fpm-alpine as ci-dev
 WORKDIR /var/www/html
