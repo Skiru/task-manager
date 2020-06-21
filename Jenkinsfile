@@ -35,8 +35,8 @@ pipeline {
         stage('Run unit tests') {
             steps{
                 script{
-                    docker.image('task-manager-test-container:latest').withRun { container ->
-                        sh "docker exec ${container.name} php ./bin/phpunit -c ./phpunit.xml.dist"
+                    dockerTestImage.inside {
+                        sh "php ./bin/phpunit -c ./phpunit.xml.dist"
                     }
                 }
             }
