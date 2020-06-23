@@ -36,7 +36,7 @@ pipeline {
             steps{
                 script{
                     dockerTestImage.inside {
-                       sh "php /var/www/html/vendor/bin/phpunit -c /var/www/html/phpunit.xml.dist --do-not-cache-result --no-interaction"
+                       sh "php /var/www/html/bin/phpunit -c /var/www/html/phpunit.xml.dist --do-not-cache-result --no-interaction"
                     }
                 }
             }
