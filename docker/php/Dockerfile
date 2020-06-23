@@ -5,8 +5,7 @@ COPY ./composer.lock ./
 RUN composer install --no-scripts --ignore-platform-reqs
 
 FROM php:7.4-fpm-alpine as ci-dev
-RUN apk add --no-cache \
-    $PHPIZE_DEPS \
+RUN apk add --no-cache $PHPIZE_DEPS &&\
     sqlite-dev && \
     docker-php-ext-install bcmath && \
     docker-php-ext-enable bcmath && \
@@ -40,8 +39,7 @@ COPY /composer.lock ./
 RUN composer install --no-dev --no-scripts --ignore-platform-reqs --optimize-autoloader
 
 FROM php:7.4-fpm-alpine
-RUN apk add --no-cache \
-    $PHPIZE_DEPS \
+RUN apk add --no-cache $PHPIZE_DEPS &&\
     sqlite-dev && \
     docker-php-ext-install bcmath && \
     docker-php-ext-enable bcmath && \
