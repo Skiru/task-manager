@@ -35,7 +35,7 @@ pipeline {
         stage('Run unit tests') {
             steps{
                 script{
-                    dockerTestImage.inside { container
+                    dockerTestImage.inside {
                        sh "php /var/www/html/vendor/bin/phpunit -c /var/www/html/phpunit.xml.dist --do-not-cache-result --no-interaction"
                     }
                 }

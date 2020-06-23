@@ -20,5 +20,4 @@ RUN  mkdir -p /var/www/html/var/log/
 COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
 COPY ./ /var/www/html
 COPY --from=composer-dev /app/vendor /var/www/html/vendor
-RUN chmod 777 -R /var/www/html
 RUN chown www-data:www-data /var/www/html/data/task.sqlite
