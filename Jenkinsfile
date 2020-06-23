@@ -27,7 +27,7 @@ pipeline {
         stage('Building test image') {
           steps{
             script {
-              dockerTestImage = docker.build("task-manager-test-container", "--target ci-dev -f ./docker/php/Dockerfile-test . --no-cache=true")
+              dockerTestImage = docker.build("task-manager-test-container", "--target ci-dev -f ./docker/php/Dockerfile-test . ")
             }
           }
         }
@@ -45,7 +45,7 @@ pipeline {
         stage('Building php image') {
           steps{
             script {
-              dockerPhpImage = docker.build(registry + ":" + containerName + "-$BUILD_NUMBER", "-f ./docker/php/Dockerfile . --no-cache=true")
+              dockerPhpImage = docker.build(registry + ":" + containerName + "-$BUILD_NUMBER", "-f ./docker/php/Dockerfile . ")
             }
           }
         }
