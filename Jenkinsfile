@@ -5,7 +5,7 @@ pipeline {
         registry = "mkoziol/purpleclouds"
         registryCredential = 'dockerhub'
         dockerPhpImage = ''
-//         dockerTestImage = ''
+        dockerTestImage = ''
         containerName = 'task-manager-php'
     }
 
