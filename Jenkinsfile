@@ -27,7 +27,7 @@ pipeline {
         stage('Building test image') {
           steps{
             script {
-              dockerTestImage = docker.build("task-manager-test-container", "--target ci-dev -f ./docker/php/Dockerfile .")
+              dockerTestImage = docker.build("task-manager-test-container", "--target ci-dev -f ./docker/php/Dockerfile-test .")
             }
           }
         }
@@ -36,7 +36,7 @@ pipeline {
             steps{
                 script{
                     dockerTestImage.withRun("--env-file=./.env.test") { container ->
-                       sh "docker exec ${container.id} pwd"
+                       sh "docker exec ${container.id} php ./phpunit --do-not-cache-result --no-interaction"
                     }
                 }
             }
