@@ -1,36 +1,3 @@
-FROM composer as composer-dev
-WORKDIR /app
-COPY ./composer.json ./
-COPY ./composer.lock ./
-RUN composer install --no-scripts --ignore-platform-reqs
-
-FROM php:7.4-fpm-alpine as ci-dev
-RUN apk add --no-cache $PHPIZE_DEPS && \
-    docker-php-ext-install bcmath && \
-    docker-php-ext-enable bcmath && \
-    docker-php-ext-install pdo pdo_sqlite && \
-    docker-php-ext-enable pdo pdo_sqlite && \
-    docker-php-ext-install opcache && \
-    docker-php-ext-enable opcache && \
-    rm -rf /tmp/pear
-
-WORKDIR /var/www/html
-COPY --from=composer-dev /app/vendor ./vendor
-COPY /bin ./bin
-COPY /config ./config
-COPY /data ./data
-COPY /public ./public
-COPY /src ./src
-COPY /templates ./templates
-COPY /tests ./tests
-COPY /composer.json ./
-COPY /composer.lock ./
-COPY /.env.dist ./.env.dist
-COPY /.env.test ./.env.test
-COPY /phpunit.xml.dist ./phpunit.xml.dist
-
-RUN mkdir -p /var/www/html/var/log/
-
 FROM composer as composer-prod
 WORKDIR /app
 COPY /composer.json ./
