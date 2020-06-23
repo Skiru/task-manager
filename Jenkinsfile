@@ -35,8 +35,8 @@ pipeline {
         stage('Run unit tests') {
             steps{
                 script{
-                    dockerTestImage.inside {
-                        sh "php ./bin/phpunit -c ./phpunit.xml.dist"
+                    dockerTestImage.withRun("--env-file=./.env.test") { container ->
+                       sh "docker exec ${container.id} php ./vendor/bin/phpunit -c ./phpunit.xml.dist --do-not-cache-result --no-interaction"
                     }
                 }
             }
