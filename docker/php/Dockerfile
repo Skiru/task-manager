@@ -19,7 +19,8 @@ COPY /composer.lock ./
 COPY /.env.dist ./.env.dist
 COPY /.env.test ./.env.test
 COPY /phpunit.xml.dist ./phpunit.xml.dist
-RUN apk add --no-cache $PHPIZE_DEPS && \
+RUN apk add --no-cache \
+    $PHPIZE_DEPS \
     sqlite-dev && \
     docker-php-ext-install bcmath && \
     docker-php-ext-enable bcmath && \
@@ -28,6 +29,7 @@ RUN apk add --no-cache $PHPIZE_DEPS && \
     docker-php-ext-install opcache && \
     docker-php-ext-enable opcache && \
     rm -rf /tmp/pear
+
 RUN mkdir -p /var/www/html/var/log/
 
 FROM composer as composer-prod
