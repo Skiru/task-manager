@@ -2,11 +2,10 @@ FROM composer as composer-dev
 WORKDIR /app
 COPY ./composer.json ./
 COPY ./composer.lock ./
-RUN composer install --no-scripts --ignore-platform-reqs
+RUN composer install
 
 FROM php:7.4-fpm-alpine as ci-dev
-RUN apk add --no-cache $PHPIZE_DEPS &&\
-    sqlite-dev && \
+RUN apk add --no-cache $PHPIZE_DEPS && \
     docker-php-ext-install bcmath && \
     docker-php-ext-enable bcmath && \
     docker-php-ext-install pdo pdo_sqlite && \
