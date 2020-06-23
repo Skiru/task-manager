@@ -21,7 +21,6 @@ COPY /.env.test ./.env.test
 COPY /phpunit.xml.dist ./phpunit.xml.dist
 RUN apk add --no-cache \
     $PHPIZE_DEPS \
-    sqlite-dev && \
     docker-php-ext-install bcmath && \
     docker-php-ext-enable bcmath && \
     docker-php-ext-install pdo pdo_sqlite && \
