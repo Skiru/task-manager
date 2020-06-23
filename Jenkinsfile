@@ -24,24 +24,23 @@ pipeline {
             }
         }
 
-//Need to be adjusted
-//          stage('Building test image') {
-//           steps{
-//             script {
-//               dockerTestImage = docker.build("task-manager-test-container", "--target ci-dev -f ./docker/php/Dockerfile .")
-//             }
-//           }
-//         }
-//
-//         stage('Run unit tests') {
-//             steps{
-//                 script{
-//                     dockerTestImage.inside {
-//                         sh "php ./bin/phpunit -c ./phpunit.xml.dist"
-//                     }
-//                 }
-//             }
-//         }//
+         stage('Building test image') {
+          steps{
+            script {
+              dockerTestImage = docker.build("task-manager-test-container", "--target ci-dev -f ./docker/php/Dockerfile .")
+            }
+          }
+        }
+
+        stage('Run unit tests') {
+            steps{
+                script{
+                    dockerTestImage.inside {
+                        sh "php ./bin/phpunit -c ./phpunit.xml.dist"
+                    }
+                }
+            }
+        }
 
         stage('Building php image') {
           steps{
