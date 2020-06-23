@@ -5,7 +5,8 @@ COPY ./composer.lock ./
 RUN composer install --no-scripts --ignore-platform-reqs
 
 FROM php:7.4-fpm-alpine as ci-dev
-RUN apk add --no-cache $PHPIZE_DEPS && \
+RUN apk add --no-cache \
+    $PHPIZE_DEPS \
     sqlite-dev && \
     docker-php-ext-install bcmath && \
     docker-php-ext-enable bcmath && \
@@ -38,7 +39,8 @@ COPY /composer.lock ./
 RUN composer install --no-dev --no-scripts --ignore-platform-reqs --optimize-autoloader
 
 FROM php:7.4-fpm-alpine
-RUN apk add --no-cache $PHPIZE_DEPS && \
+RUN apk add --no-cache \
+    $PHPIZE_DEPS \
     sqlite-dev && \
     docker-php-ext-install bcmath && \
     docker-php-ext-enable bcmath && \
@@ -47,6 +49,7 @@ RUN apk add --no-cache $PHPIZE_DEPS && \
     docker-php-ext-install opcache && \
     docker-php-ext-enable opcache && \
     rm -rf /tmp/pear
+
 ENV APP_ENV="prod" \
     APP_SECRET="ca6777ca3b9d07d5a38d4f68036f232d" \
     DATABASE_URL="sqlite:////var/www/html/data/task.sqlite" \
