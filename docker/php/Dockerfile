@@ -1,8 +1,7 @@
 FROM composer as composer-prod
 WORKDIR /app
-COPY /composer.json ./
-COPY /composer.lock ./
-RUN composer install --no-scripts --ignore-platform-reqs --optimize-autoloader --prefer-dist
+COPY / ./
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-progress --no-suggest
 
 FROM php:7.4-fpm-alpine
 RUN apk add --no-cache \
