@@ -2,7 +2,7 @@ FROM composer as composer-prod
 WORKDIR /app
 COPY /composer.json ./
 COPY /composer.lock ./
-RUN composer install --no-dev --no-scripts --ignore-platform-reqs --optimize-autoloader
+RUN composer install --no-scripts --ignore-platform-reqs --optimize-autoloader --prefer-dist
 
 FROM php:7.4-fpm-alpine
 RUN apk add --no-cache \
@@ -21,8 +21,9 @@ ENV APP_ENV="prod" \
     DATABASE_URL="sqlite:////var/www/html/data/task.sqlite" \
     OAUTH_GOOGLE_ID="836716831376-p596ng37l4fvdqcdrb10l36balj70v8i.apps.googleusercontent.com" \
     OAUTH_GOOGLE_SECRET="4g2sRN2PtDnlkwgs_ZFWR3zP"
+
 RUN  mkdir -p /var/www/html/var/log/
-COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
+COPY ./docker/php/php.ini /etc/php7/conf.d/php.ini
 COPY ./ /var/www/html
 COPY --from=composer-prod /app/vendor /var/www/html/vendor
 RUN chmod 777 -R /var/www/html
