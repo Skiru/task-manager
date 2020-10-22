@@ -57,12 +57,11 @@ pipeline {
         stage('Remove Unused docker image') {
           steps{
             sh "docker rmi ${env.FULL_PHP_IMAGE_NAME}"
-            sh "docker rmi ${env.FULL_ASSETS_IMAGE_NAME}"
             sh "docker image prune -f -a"
           }
         }
 
-        stage('Build blog application') {
+        stage('Build task-manager application') {
             steps{
                 sshagent (credentials: ['purple-clouds-server']) {
                     sh 'echo \
